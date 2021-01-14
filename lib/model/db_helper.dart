@@ -8,9 +8,6 @@ class DatabaseHelper with ChangeNotifier {
   Database database;
   String table = 'notes';
 
-  DatabaseHelper() {
-    init();
-  }
 
   init() async {
     database = await openDatabase(

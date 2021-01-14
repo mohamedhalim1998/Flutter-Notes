@@ -11,7 +11,9 @@ class NoteProvider with ChangeNotifier {
     init();
   }
   init() async{
-    this.helper = await DatabaseHelper();
+    this.helper = DatabaseHelper();
+    await helper.init();
+    notifyListeners();
   }
 
   void insertNote(Note note) {
