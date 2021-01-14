@@ -12,6 +12,21 @@ class Notes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Consumer<NoteProvider>(
+        builder: (context, provider, child) {
+          return FloatingActionButton(
+            onPressed: () {
+              provider.insertNote(
+                  Note(title: "Yet Another Title", note: "Yet Another Note"));
+            },
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ),
+          );
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
