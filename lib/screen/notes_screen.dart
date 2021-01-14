@@ -3,12 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:notes_app/model/db_helper.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/model/note_provider.dart';
+import 'package:notes_app/screen/add_note_screen.dart';
 import 'package:notes_app/widgets/note_card.dart';
 import 'package:notes_app/widgets/notes_list.dart';
 import 'package:notes_app/widgets/search_box.dart';
 import 'package:provider/provider.dart';
 
 class Notes extends StatelessWidget {
+  static const String ROUTE_ID = "notes-screen";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +19,7 @@ class Notes extends StatelessWidget {
         builder: (context, provider, child) {
           return FloatingActionButton(
             onPressed: () {
-              provider.insertNote(
-                  Note(title: "Yet Another Title", note: "Yet Another Note"));
+              Navigator.pushNamed(context, AddNote.ROUTE_ID);
             },
             child: Icon(
               Icons.add,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/db_helper.dart';
 import 'package:notes_app/model/note_provider.dart';
+import 'package:notes_app/screen/add_note_screen.dart';
 import 'package:notes_app/screen/notes_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,12 @@ class NotesApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => NoteProvider(),
       child: MaterialApp(
-        home: Notes(),
+        initialRoute: Notes.ROUTE_ID,
+        routes: {
+          Notes.ROUTE_ID:(context) => Notes(),
+          AddNote.ROUTE_ID:(context) => AddNote(),
+
+        },
       ),
     );
   }
