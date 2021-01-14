@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/model/Note.dart';
+
 class NoteCard extends StatelessWidget {
+  final Note note;
+
+  NoteCard(this.note);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -10,7 +16,7 @@ class NoteCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "Title",
+              note.title,
               textAlign: TextAlign.left,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -18,10 +24,8 @@ class NoteCard extends StatelessWidget {
               ),
             ),
             Text(
-              "this a text for note style to test the the style of the note" ,
-              style: TextStyle(
-                  color: Colors.black54
-              ),
+              note.note,
+              style: TextStyle(color: Colors.black54),
             ),
           ],
         ),

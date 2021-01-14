@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/model/db_helper.dart';
 import 'package:notes_app/screen/notes_screen.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
@@ -8,10 +10,14 @@ void main() {
 }
 
 class NotesApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Notes(),
+    return ChangeNotifierProvider(
+      create: (context) => DatabaseHelper(),
+      child: MaterialApp(
+        home: Notes(),
+      ),
     );
   }
 }
