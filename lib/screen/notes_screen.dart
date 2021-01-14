@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notes_app/model/db_helper.dart';
 import 'package:notes_app/model/Note.dart';
+import 'package:notes_app/model/note_provider.dart';
 import 'package:notes_app/widgets/note_card.dart';
 import 'package:notes_app/widgets/notes_list.dart';
 import 'package:notes_app/widgets/search_box.dart';
@@ -18,7 +19,7 @@ class Notes extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Consumer<DatabaseHelper>(
+                child: Consumer<NoteProvider>(
                   builder: (context, value, child) {
                     return FutureBuilder(
                       future: getNotes(value),
@@ -39,7 +40,7 @@ class Notes extends StatelessWidget {
     );
   }
 
-  Future<List<Note>> getNotes(DatabaseHelper db) async {
-    return await db.getAll();
+  Future<List<Note>> getNotes(NoteProvider provider) async {
+    return await provider.getAllNotes();
   }
 }
