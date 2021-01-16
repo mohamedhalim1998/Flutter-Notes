@@ -10,20 +10,29 @@ class NoteProvider with ChangeNotifier {
   NoteProvider() {
     init();
   }
-  init() async{
+
+  init() async {
     this.helper = DatabaseHelper();
     await helper.init();
     notifyListeners();
   }
 
   void insertNote(Note note) {
-    note.id = Uuid().v4();
-    helper.insert(note);
-    notifyListeners();
+    if (isNotEmptyNote(note)) {
+      note.id = Uuid().v4();
+      note.time = DateTime.now().millisecond;
+      helper.insert(note);
+      notifyListeners();
+    }
   }
 
   Future<List<Note>> getAllNotes() async {
     final List<Map<String, dynamic>> maps = await helper.getAll();
     return List.generate(maps.length, (index) => Note.fromMap(maps[index]));
+  }
+
+  bool isNotEmptyNote(Note note) {
+    return ((note.title != null && note.title.isNotEmpty) ||
+        (note.note != null && note.note.isNotEmpty));
   }
 }
