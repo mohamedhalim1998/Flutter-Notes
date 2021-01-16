@@ -5,17 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'Note.dart';
 
 class NoteProvider with ChangeNotifier {
-  DatabaseHelper helper;
-
-  NoteProvider() {
-    init();
-  }
-
-  init() async {
-    this.helper = DatabaseHelper();
-    await helper.init();
-    notifyListeners();
-  }
+  DatabaseHelper helper = DatabaseHelper.instance;
 
   void insertNote(Note note) {
     if (isNotEmptyNote(note)) {

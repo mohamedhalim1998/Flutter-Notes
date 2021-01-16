@@ -1,33 +1,44 @@
-import 'package:flutter/foundation.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper with ChangeNotifier {
-  Database database;
-  String table = 'notes';
+class DatabaseHelper {
+  static Database _database;
+  String _table = 'notes';
+  int _version = 3;
+  static final DatabaseHelper instance = DatabaseHelper._constructor();
 
-  init() async {
-    database = await openDatabase(
-      join(await getDatabasesPath(), "notes.db"),
-      onCreate: (db, version) => createTable(db),
-      onUpgrade: (db, oldVersion, newVersion) {
-        db.execute("DROP TABLE IF EXISTS $table;");
-        createTable(db);
-      },
-      version: 3,
-    );
+  DatabaseHelper._constructor();
+  Future<Database> get database async {
+    if (_database == null) {
+      _database = await openDatabase(
+        join(await getDatabasesPath(), "notes.db"),
+        onCreate: (db, version) => _createTable(db),
+        onUpgrade: (db, oldVersion, newVersion) {
+          db.execute("DROP TABLE IF EXISTS $_table;");
+          _createTable(db);
+        },
+        version: _version,
+      );
+    }
+    return _database;
   }
-  void createTable(Database db){
+  init() async {
+
+  }
+
+  void _createTable(Database db) {
     db.execute(
-        "CREATE TABLE $table(id TEXT PRIMARY KEY,title TEXT,note  TEXT, color INTEGER, time INTEGER);");
+        "CREATE TABLE $_table(id TEXT PRIMARY KEY,title TEXT,note  TEXT, color INTEGER, time INTEGER);");
   }
 
   Future<void> insert(Note note) async {
-    await database.insert(table, note.toMap());
+    Database db = await instance.database;
+    await db.insert(_table, note.toMap());
   }
 
   Future<List<Map<String, dynamic>>> getAll() async {
-    return await database.query(table);
+    Database db = await instance.database;
+    return await db.query(_table);
   }
 }
