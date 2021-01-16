@@ -1,5 +1,13 @@
-import 'package:flutter/material.dart';
-
-
-int kColorWhite = Color.fromARGB(255, 255, 255, 255).value;
-int kColorYellow = Color.fromARGB(255, 255, 241, 118).value;
+List<int> colors = [
+  0xFFFFFFFF,
+  0xFFFFF176,
+  0xFFF9BE3D,
+  0xFFC8F08F,
+  0xFFA5F9EB,
+  0xFFF08B82,
+  0xFFCBF0F8,
+  0xFFAFCBFA,
+  0xFFD7AEFC,
+  0XFFF5CEE9,
+  0xFFE9EAEE
+];
