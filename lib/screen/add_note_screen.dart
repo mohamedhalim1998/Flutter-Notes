@@ -56,6 +56,7 @@ class _AddNoteState extends State<AddNote> {
             } else {
               note.title = title;
               note.note = noteText;
+              note.color = color.color.value;
               provider.updateNote(note);
             }
             return true;
@@ -79,6 +80,7 @@ class _AddNoteState extends State<AddNote> {
                         } else {
                           note.title = title;
                           note.note = noteText;
+                          note.color = color.color.value;
                           provider.updateNote(note);
                         }
                         Navigator.pop(context);
