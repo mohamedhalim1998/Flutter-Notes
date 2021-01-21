@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/model/note_color_state.dart';
 import 'package:notes_app/model/note_provider.dart';
@@ -13,70 +12,82 @@ class AddNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NoteProvider provider = context.read<NoteProvider>();
     return Consumer<NoteColor>(
       builder: (context, color, child) {
-        return Scaffold(
-          backgroundColor: color.color,
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Consumer<NoteProvider>(
-                  builder: (context, provider, child) {
-                    return IconButton(
-                        padding: EdgeInsets.only(left: 10, bottom: 40),
-                        icon: Icon(Icons.arrow_back),
-                        color: Colors.black45,
-                        onPressed: () {
-                          provider.insertNote(Note(
-                              title: title,
-                              note: note,
-                              color: color.color.value));
-                          Navigator.pop(context);
-                        });
-                  },
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: TextField(
-                    onChanged: (val) {
-                      title = val;
+        return WillPopScope(
+          onWillPop: () async{
+            provider.insertNote(Note(
+                title: title,
+                note: note,
+                color: color.color.value));
+            return true;
+          },
+          child: Scaffold(
+            backgroundColor: color.color,
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Consumer<NoteProvider>(
+                    builder: (context, provider, child) {
+                      return IconButton(
+                          padding: EdgeInsets.only(left: 10, bottom: 40),
+                          icon: Icon(Icons.arrow_back),
+                          color: Colors.black45,
+                          onPressed: () {
+                            provider.insertNote(Note(
+                                title: title,
+                                note: note,
+                                color: color.color.value));
+                            Navigator.pop(context);
+                          });
                     },
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 22,
-                    ),
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Title",
-                        hintStyle: TextStyle(color: Colors.black38)),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
+                  Padding(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     child: TextField(
-                      expands: true,
                       onChanged: (val) {
-                        note = val;
+                        title = val;
                       },
-                      autofocus: true,
-                      style: TextStyle(fontSize: 18),
-                      maxLines: null,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 22,
+                      ),
                       decoration: InputDecoration(
-                        hintText: "Note",
-                        hintStyle: TextStyle(color: Colors.black38),
-                        border: InputBorder.none,
+                          border: InputBorder.none,
+                          hintText: "Title",
+                          hintStyle: TextStyle(color: Colors.black38)),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: TextField(
+                        expands: true,
+                        onChanged: (val) {
+                          note = val;
+                        },
+                        autofocus: true,
+                        style: TextStyle(fontSize: 18),
+                        maxLines: null,
+                        decoration: InputDecoration(
+                          hintText: "Note",
+                          hintStyle: TextStyle(color: Colors.black38),
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                BottomBar(),
-              ],
-            ),
-          ),
+                  BottomBar(),
+                ],
+              ),
+            )
+            ,
+          )
+          ,
         );
       },
     );
