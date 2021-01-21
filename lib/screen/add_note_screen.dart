@@ -16,11 +16,9 @@ class AddNote extends StatelessWidget {
     return Consumer<NoteColor>(
       builder: (context, color, child) {
         return WillPopScope(
-          onWillPop: () async{
-            provider.insertNote(Note(
-                title: title,
-                note: note,
-                color: color.color.value));
+          onWillPop: () async {
+            provider.insertNote(
+                Note(title: title, note: note, color: color.color.value));
             return true;
           },
           child: Scaffold(
@@ -29,24 +27,20 @@ class AddNote extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Consumer<NoteProvider>(
-                    builder: (context, provider, child) {
-                      return IconButton(
-                          padding: EdgeInsets.only(left: 10, bottom: 40),
-                          icon: Icon(Icons.arrow_back),
-                          color: Colors.black45,
-                          onPressed: () {
-                            provider.insertNote(Note(
-                                title: title,
-                                note: note,
-                                color: color.color.value));
-                            Navigator.pop(context);
-                          });
-                    },
-                  ),
+                  IconButton(
+                      padding: EdgeInsets.only(left: 10, bottom: 40),
+                      icon: Icon(Icons.arrow_back),
+                      color: Colors.black45,
+                      onPressed: () {
+                        provider.insertNote(Note(
+                            title: title,
+                            note: note,
+                            color: color.color.value));
+                        Navigator.pop(context);
+                      }),
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     child: TextField(
                       onChanged: (val) {
                         title = val;
@@ -84,10 +78,8 @@ class AddNote extends StatelessWidget {
                   BottomBar(),
                 ],
               ),
-            )
-            ,
-          )
-          ,
+            ),
+          ),
         );
       },
     );
