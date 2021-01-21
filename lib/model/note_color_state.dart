@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:notes_app/utils/const.dart';
 
 class NoteColor with ChangeNotifier {
-  Color color = Color(colors[0]);
+  Color _color = Color(colors[0]);
+
+  Color get color => _color;
+
+  set color(Color color) {
+    _color = color;
+  }
 
   NoteColor() {
     color = Color(colors[0]);
@@ -10,6 +16,7 @@ class NoteColor with ChangeNotifier {
 
   void changeColor(Color color) {
     this.color = color;
+    print("change");
     notifyListeners();
   }
 }

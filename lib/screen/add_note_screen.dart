@@ -5,20 +5,39 @@ import 'package:notes_app/model/note_provider.dart';
 import 'package:notes_app/widgets/note_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
-class AddNote extends StatelessWidget {
+class AddNote extends StatefulWidget {
   static const String ROUTE_ID = "add-note-screen";
+
+  @override
+  _AddNoteState createState() => _AddNoteState();
+}
+
+class _AddNoteState extends State<AddNote> {
   String title;
-  String note;
+
+  String noteText;
+
+  Color noteColor;
 
   @override
   Widget build(BuildContext context) {
     final NoteProvider provider = context.read<NoteProvider>();
+    final Note note = ModalRoute.of(context).settings.arguments;
+    if (note != null) {
+      title = note.title;
+      noteText = note.note;
+      noteColor = Color(note.color);
+    }
     return Consumer<NoteColor>(
       builder: (context, color, child) {
+        if (noteColor != null) {
+          color.color = noteColor;
+          noteColor = null;
+        }
         return WillPopScope(
           onWillPop: () async {
             provider.insertNote(
-                Note(title: title, note: note, color: color.color.value));
+                Note(title: title, note: noteText, color: color.color.value));
             return true;
           },
           child: Scaffold(
@@ -34,14 +53,15 @@ class AddNote extends StatelessWidget {
                       onPressed: () {
                         provider.insertNote(Note(
                             title: title,
-                            note: note,
+                            note: noteText,
                             color: color.color.value));
                         Navigator.pop(context);
                       }),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    child: TextField(
+                    child: TextFormField(
+                      initialValue: title,
                       onChanged: (val) {
                         title = val;
                       },
@@ -59,10 +79,11 @@ class AddNote extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 4),
-                      child: TextField(
+                      child: TextFormField(
+                        initialValue: noteText,
                         expands: true,
                         onChanged: (val) {
-                          note = val;
+                          noteText = val;
                         },
                         autofocus: true,
                         style: TextStyle(fontSize: 18),
