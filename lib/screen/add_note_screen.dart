@@ -27,7 +27,7 @@ class _AddNoteState extends State<AddNote> {
   void initState() {
     super.initState();
     updateMode = false;
-    time = DateTime.now().millisecond;
+    time = DateTime.now().millisecondsSinceEpoch;
   }
 
   @override
@@ -132,7 +132,10 @@ class _AddNoteState extends State<AddNote> {
     );
   }
   static String getFormattedDate(int time) {
-    DateTime now = DateTime.fromMillisecondsSinceEpoch(time);
-    return DateFormat.jm().format(now);
+    DateTime toFormat = DateTime.fromMillisecondsSinceEpoch(time);
+    int diff = DateTime.now().millisecondsSinceEpoch - time;
+    if(Duration(milliseconds: diff).inDays < 1)
+      return DateFormat.jm().format(toFormat);
+    return DateFormat.yMMMd('en_US').format(toFormat);
   }
 }

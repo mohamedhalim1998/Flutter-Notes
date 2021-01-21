@@ -10,7 +10,7 @@ class NoteProvider with ChangeNotifier {
   void insertNote(Note note) {
     if (isNotEmptyNote(note)) {
       note.id = Uuid().v4();
-      note.time = DateTime.now().millisecond;
+      note.time = DateTime.now().millisecondsSinceEpoch;
       helper.insert(note);
       notifyListeners();
     }
@@ -19,7 +19,7 @@ class NoteProvider with ChangeNotifier {
   void updateNote(Note note) async {
     if (isNotEmptyNote(note)) {
       if (await hasChanged(note)) {
-        note.time = DateTime.now().millisecond;
+        note.time = DateTime.now().millisecondsSinceEpoch;
         helper.update(note);
         notifyListeners();
       }
