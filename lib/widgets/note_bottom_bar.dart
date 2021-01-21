@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'note_popup_menu.dart';
 class BottomBar extends StatelessWidget {
-  final String time = getFormattedDate();
+  final String time;
+
+  const BottomBar({Key key, this.time}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,4 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  static String getFormattedDate() {
-    DateTime now = DateTime.now();
-    return DateFormat.jm().format(now);
-  }
 }
