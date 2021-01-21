@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/model/note_color_state.dart';
 import 'package:notes_app/model/note_provider.dart';
@@ -19,6 +20,14 @@ class _AddNoteState extends State<AddNote> {
 
   Color noteColor;
 
+  bool updateMode;
+
+  @override
+  void initState() {
+    super.initState();
+    updateMode = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final NoteProvider provider = context.read<NoteProvider>();
@@ -27,6 +36,8 @@ class _AddNoteState extends State<AddNote> {
       title = note.title;
       noteText = note.note;
       noteColor = Color(note.color);
+      updateMode = true;
+      print("in update mode: $updateMode");
     }
     return Consumer<NoteColor>(
       builder: (context, color, child) {
@@ -36,8 +47,14 @@ class _AddNoteState extends State<AddNote> {
         }
         return WillPopScope(
           onWillPop: () async {
-            provider.insertNote(
-                Note(title: title, note: noteText, color: color.color.value));
+            if (!updateMode) {
+              provider.insertNote(
+                  Note(title: title, note: noteText, color: color.color.value));
+            } else {
+              note.title = title;
+              note.note = noteText;
+              provider.updateNote(note);
+            }
             return true;
           },
           child: Scaffold(
@@ -51,10 +68,16 @@ class _AddNoteState extends State<AddNote> {
                       icon: Icon(Icons.arrow_back),
                       color: Colors.black45,
                       onPressed: () {
-                        provider.insertNote(Note(
-                            title: title,
-                            note: noteText,
-                            color: color.color.value));
+                        if (!updateMode) {
+                          provider.insertNote(Note(
+                              title: title,
+                              note: noteText,
+                              color: color.color.value));
+                        } else {
+                          note.title = title;
+                          note.note = noteText;
+                          provider.updateNote(note);
+                        }
                         Navigator.pop(context);
                       }),
                   Padding(

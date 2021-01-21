@@ -1,4 +1,3 @@
-
 class Note {
   String id;
   String title;
@@ -25,4 +24,19 @@ class Note {
       "color": color
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (other != null && other is Note) {
+      return id == other.id &&
+          title == other.title &&
+          note == other.note &&
+          color == other.color;
+    }
+    return false;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
 }

@@ -16,6 +16,21 @@ class NoteProvider with ChangeNotifier {
     }
   }
 
+  void updateNote(Note note) async {
+    if (isNotEmptyNote(note)) {
+      if (await hasChanged(note)) {
+        note.time = DateTime.now().millisecond;
+        helper.update(note);
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<bool> hasChanged(Note note) async {
+    Note old = Note.fromMap(await helper.getNote(note.id));
+    return old != note;
+  }
+
   Future<List<Note>> getAllNotes() async {
     final List<Map<String, dynamic>> maps = await helper.getAll();
     return List.generate(maps.length, (index) => Note.fromMap(maps[index]));

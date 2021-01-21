@@ -9,6 +9,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._constructor();
 
   DatabaseHelper._constructor();
+
   Future<Database> get database async {
     if (_database == null) {
       _database = await openDatabase(
@@ -23,9 +24,8 @@ class DatabaseHelper {
     }
     return _database;
   }
-  init() async {
 
-  }
+  init() async {}
 
   void _createTable(Database db) {
     db.execute(
@@ -40,5 +40,16 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getAll() async {
     Database db = await instance.database;
     return await db.query(_table);
+  }
+
+  Future<int> update(Note note) async {
+    Database db = await instance.database;
+    return await db.update(_table, note.toMap(), where: "id = ?", whereArgs: [note.id]);
+  }
+
+  Future<Map<String, dynamic>> getNote(String id) async {
+    Database db = await instance.database;
+
+    return (await db.query(_table, where: "id = ?", whereArgs: [id]))[0];
   }
 }
