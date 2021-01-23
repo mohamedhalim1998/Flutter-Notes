@@ -32,6 +32,10 @@ class NotePopupMenu extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.copy_rounded),
                 title: Text("Copy"),
+                onTap: () {
+                  provider.insertNote(note);
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                },
               ),
               ListTile(
                 leading: Icon(Icons.share),
