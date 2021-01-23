@@ -10,7 +10,9 @@ class NoteProvider with ChangeNotifier {
   void insertNote(Note note) {
     if (isNotEmptyNote(note)) {
       note.id = Uuid().v4();
-      note.time = DateTime.now().millisecondsSinceEpoch;
+      note.time = DateTime
+          .now()
+          .millisecondsSinceEpoch;
       helper.insert(note);
       notifyListeners();
     }
@@ -19,9 +21,12 @@ class NoteProvider with ChangeNotifier {
   void updateNote(Note note) async {
     if (isNotEmptyNote(note)) {
       if (await hasChanged(note)) {
-        note.time = DateTime.now().millisecondsSinceEpoch;
+        note.time = DateTime
+            .now()
+            .millisecondsSinceEpoch;
         helper.update(note);
         notifyListeners();
+        print("add new");
       }
     }
   }
@@ -39,5 +44,14 @@ class NoteProvider with ChangeNotifier {
   bool isNotEmptyNote(Note note) {
     return ((note.title != null && note.title.isNotEmpty) ||
         (note.note != null && note.note.isNotEmpty));
+  }
+
+  void deleteNote(Note note) {
+    print("deleting $note");
+    if (note != null && note.id != null) {
+      helper.delete(note.id);
+      print("deleted");
+      notifyListeners();
+    }
   }
 }

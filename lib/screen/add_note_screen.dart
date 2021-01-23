@@ -23,6 +23,7 @@ class _AddNoteState extends State<AddNote> {
   bool updateMode;
 
   int time;
+
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,6 @@ class _AddNoteState extends State<AddNote> {
       noteColor = Color(note.color);
       updateMode = true;
       time = note.time;
-      print("in update mode: $updateMode");
     }
     return Consumer<NoteColor>(
       builder: (context, color, child) {
@@ -124,7 +124,10 @@ class _AddNoteState extends State<AddNote> {
                       ),
                     ),
                   ),
-                  BottomBar(time: getFormattedDate(time)),
+                  BottomBar(
+                    time: getFormattedDate(time),
+                    note: note,
+                  ),
                 ],
               ),
             ),
@@ -133,10 +136,11 @@ class _AddNoteState extends State<AddNote> {
       },
     );
   }
+
   static String getFormattedDate(int time) {
     DateTime toFormat = DateTime.fromMillisecondsSinceEpoch(time);
     int diff = DateTime.now().millisecondsSinceEpoch - time;
-    if(Duration(milliseconds: diff).inDays < 1)
+    if (Duration(milliseconds: diff).inDays < 1)
       return DateFormat.jm().format(toFormat);
     return DateFormat.yMMMd('en_US').format(toFormat);
   }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/model/Note.dart';
 
 import 'note_popup_menu.dart';
 class BottomBar extends StatelessWidget {
   final String time;
-
-  const BottomBar({Key key, this.time}) : super(key: key);
+  final Note note;
+  const BottomBar({Key key, this.time, this.note}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class BottomBar extends StatelessWidget {
                 isScrollControlled: true,
                 context: context,
                 builder: (context) {
-                  return SingleChildScrollView(child: NotePopupMenu());
+                  return SingleChildScrollView(child: NotePopupMenu(note: note,));
                 },
               );
             })

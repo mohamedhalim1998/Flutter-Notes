@@ -52,4 +52,9 @@ class DatabaseHelper {
 
     return (await db.query(_table, where: "id = ?", whereArgs: [id]))[0];
   }
+
+  Future<int> delete(String id) async{
+    Database db = await instance.database;
+    return await db.delete(_table, where: "id = ?", whereArgs: [id]);
+  }
 }
