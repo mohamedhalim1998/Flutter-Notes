@@ -24,6 +24,8 @@ class _AddNoteState extends State<AddNote> {
 
   int time;
 
+  Note note;
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +36,7 @@ class _AddNoteState extends State<AddNote> {
   @override
   Widget build(BuildContext context) {
     final NoteProvider provider = context.read<NoteProvider>();
-    final Note note = ModalRoute.of(context).settings.arguments;
+    note = ModalRoute.of(context).settings.arguments;
     if (note != null) {
       title = note.title;
       noteText = note.note;
@@ -46,19 +48,11 @@ class _AddNoteState extends State<AddNote> {
       builder: (context, color, child) {
         if (noteColor != null) {
           color.color = noteColor;
-          noteColor = null;
         }
+        noteColor = color.color;
         return WillPopScope(
           onWillPop: () async {
-            if (!updateMode) {
-              provider.insertNote(
-                  Note(title: title, note: noteText, color: color.color.value));
-            } else {
-              note.title = title;
-              note.note = noteText;
-              note.color = color.color.value;
-              provider.updateNote(note);
-            }
+            insertOrUpdate(provider);
             return true;
           },
           child: Scaffold(
@@ -72,17 +66,7 @@ class _AddNoteState extends State<AddNote> {
                       icon: Icon(Icons.arrow_back),
                       color: Colors.black45,
                       onPressed: () {
-                        if (!updateMode) {
-                          provider.insertNote(Note(
-                              title: title,
-                              note: noteText,
-                              color: color.color.value));
-                        } else {
-                          note.title = title;
-                          note.note = noteText;
-                          note.color = color.color.value;
-                          provider.updateNote(note);
-                        }
+                        insertOrUpdate(provider);
                         Navigator.pop(context);
                       }),
                   Padding(
@@ -135,6 +119,20 @@ class _AddNoteState extends State<AddNote> {
         );
       },
     );
+  }
+
+  void insertOrUpdate(
+    NoteProvider provider,
+  ) {
+    if (!updateMode) {
+      provider.insertNote(
+          Note(title: title, note: noteText, color: noteColor.value));
+    } else {
+      note.title = title;
+      note.note = noteText;
+      note.color = noteColor.value;
+      provider.updateNote(note);
+    }
   }
 
   static String getFormattedDate(int time) {
