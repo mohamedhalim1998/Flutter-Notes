@@ -4,6 +4,7 @@ import 'package:notes_app/model/note_color_state.dart';
 import 'package:notes_app/model/note_provider.dart';
 import 'package:notes_app/screen/notes_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 import 'color_list_view.dart';
 
@@ -40,6 +41,9 @@ class NotePopupMenu extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.share),
                 title: Text("Share"),
+                onTap: () {
+                  Share.share(note.note);
+                },
               ),
               ColorsListView(),
             ],
