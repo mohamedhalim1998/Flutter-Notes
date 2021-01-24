@@ -15,20 +15,17 @@ class Notes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SearchQuery query = context.watch<SearchQuery>();
+    final NoteProvider provider = context.watch<NoteProvider>();
     return Scaffold(
-      floatingActionButton: Consumer<NoteProvider>(
-        builder: (context, provider, child) {
-          return FloatingActionButton(
-            onPressed: () {
-              Navigator.pushNamed(context, AddNote.ROUTE_ID);
-            },
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 30,
-            ),
-          );
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AddNote.ROUTE_ID);
         },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 30,
+        ),
       ),
       body: SafeArea(
         child: Column(
@@ -37,17 +34,13 @@ class Notes extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Consumer<NoteProvider>(
-                  builder: (context, value, child) {
-                    return FutureBuilder(
-                      future: getNotes(value, query.query),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData)
-                          return NotesList(snapshot.data);
-                        else
-                          return Center(child: CircularProgressIndicator());
-                      },
-                    );
+                child: FutureBuilder(
+                  future: getNotes(provider, query.query),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData)
+                      return NotesList(snapshot.data);
+                    else
+                      return Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
