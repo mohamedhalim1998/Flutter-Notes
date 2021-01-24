@@ -28,24 +28,23 @@ class Notes extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            SearchBox(),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: FutureBuilder(
-                  future: getNotes(provider, query.query),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData)
-                      return NotesList(snapshot.data);
-                    else
-                      return Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ),
-            ),
-          ],
+        child: FutureBuilder(
+          future: getNotes(provider, query.query),
+          builder: (context, snapshot) {
+            if (snapshot.hasData)
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    title: SearchBox(),
+                    floating: true,
+                    backgroundColor: Color(0x00000000),
+                  ),
+                  NotesList(snapshot.data),
+                ],
+              );
+            else
+              return Center(child: CircularProgressIndicator());
+          },
         ),
       ),
     );

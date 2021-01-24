@@ -10,14 +10,16 @@ class NotesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
-    return GridView.builder(
+    return SliverGrid(
       gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: orientation == Orientation.portrait ? 2 : 3),
-      itemBuilder: (context, index) {
-        final Note note = notes.elementAt(index);
-        return NoteCard(note);
-      },
-      itemCount: notes.length,
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final Note note = notes.elementAt(index);
+          return NoteCard(note);
+        },
+        childCount: notes.length,
+      ),
     );
   }
 }
