@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_app/model/note_provider.dart';
+import 'package:notes_app/model/search_query_state.dart';
 import 'package:notes_app/screen/add_note_screen.dart';
 import 'package:notes_app/screen/notes_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,9 @@ class NotesApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<NoteColor>(
           create: (context) => NoteColor(),
+        ),
+        ChangeNotifierProvider<SearchQuery>(
+          create: (context) => SearchQuery(),
         )
       ],
       child: MaterialApp(

@@ -10,9 +10,7 @@ class NoteProvider with ChangeNotifier {
   void insertNote(Note note) {
     if (isNotEmptyNote(note)) {
       note.id = Uuid().v4();
-      note.time = DateTime
-          .now()
-          .millisecondsSinceEpoch;
+      note.time = DateTime.now().millisecondsSinceEpoch;
       helper.insert(note);
       notifyListeners();
     }
@@ -21,9 +19,7 @@ class NoteProvider with ChangeNotifier {
   void updateNote(Note note) async {
     if (isNotEmptyNote(note)) {
       if (await hasChanged(note)) {
-        note.time = DateTime
-            .now()
-            .millisecondsSinceEpoch;
+        note.time = DateTime.now().millisecondsSinceEpoch;
         helper.update(note);
         notifyListeners();
         print("add new");
@@ -36,8 +32,21 @@ class NoteProvider with ChangeNotifier {
     return old != note;
   }
 
+  Future<List<Note>> getNotes(String query) async {
+    if (query != null && query.isNotEmpty) {
+      return getNotesByQuery(query);
+    } else {
+      return getAllNotes();
+    }
+  }
+
   Future<List<Note>> getAllNotes() async {
     final List<Map<String, dynamic>> maps = await helper.getAll();
+    return List.generate(maps.length, (index) => Note.fromMap(maps[index]));
+  }
+
+  Future<List<Note>> getNotesByQuery(String query) async {
+    final List<Map<String, dynamic>> maps = await helper.getByQuery(query);
     return List.generate(maps.length, (index) => Note.fromMap(maps[index]));
   }
 

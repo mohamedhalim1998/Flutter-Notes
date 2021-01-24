@@ -42,9 +42,15 @@ class DatabaseHelper {
     return await db.query(_table);
   }
 
+  Future<List<Map<String, dynamic>>> getByQuery(String query) async {
+    Database db = await instance.database;
+    return await db.rawQuery("SELECT * FROM $_table WHERE title LIKE '%$query%' OR note LIKE '%$query%';");
+  }
+
   Future<int> update(Note note) async {
     Database db = await instance.database;
-    return await db.update(_table, note.toMap(), where: "id = ?", whereArgs: [note.id]);
+    return await db
+        .update(_table, note.toMap(), where: "id = ?", whereArgs: [note.id]);
   }
 
   Future<Map<String, dynamic>> getNote(String id) async {
@@ -53,7 +59,7 @@ class DatabaseHelper {
     return (await db.query(_table, where: "id = ?", whereArgs: [id]))[0];
   }
 
-  Future<int> delete(String id) async{
+  Future<int> delete(String id) async {
     Database db = await instance.database;
     return await db.delete(_table, where: "id = ?", whereArgs: [id]);
   }

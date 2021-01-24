@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:notes_app/model/db_helper.dart';
+
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/model/note_provider.dart';
+import 'package:notes_app/model/search_query_state.dart';
 import 'package:notes_app/screen/add_note_screen.dart';
-import 'package:notes_app/widgets/note_card.dart';
 import 'package:notes_app/widgets/notes_list.dart';
 import 'package:notes_app/widgets/search_box.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +14,7 @@ class Notes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SearchQuery query = context.watch<SearchQuery>();
     return Scaffold(
       floatingActionButton: Consumer<NoteProvider>(
         builder: (context, provider, child) {
@@ -39,7 +40,7 @@ class Notes extends StatelessWidget {
                 child: Consumer<NoteProvider>(
                   builder: (context, value, child) {
                     return FutureBuilder(
-                      future: getNotes(value),
+                      future: getNotes(value, query.query),
                       builder: (context, snapshot) {
                         if (snapshot.hasData)
                           return NotesList(snapshot.data);
@@ -57,7 +58,7 @@ class Notes extends StatelessWidget {
     );
   }
 
-  Future<List<Note>> getNotes(NoteProvider provider) async {
-    return await provider.getAllNotes();
+  Future<List<Note>> getNotes(NoteProvider provider, String query) async {
+    return await provider.getNotes(query);
   }
 }
