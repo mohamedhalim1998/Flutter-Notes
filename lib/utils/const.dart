@@ -1,4 +1,4 @@
-List<int> colors = [
+List<int> kColors = [
   0xFFFFFFFF,
   0xFFFFF176,
   0xFFF9BE3D,

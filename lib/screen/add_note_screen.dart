@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/model/note_color_state.dart';
 import 'package:notes_app/model/note_provider.dart';
+import 'package:notes_app/utils/const.dart';
 import 'package:notes_app/widgets/note_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -18,19 +19,20 @@ class _AddNoteState extends State<AddNote> {
 
   String noteText;
 
-  Color noteColor;
-
   bool updateMode;
 
   int time;
 
   Note note;
 
+  Color noteColor;
+
   @override
   void initState() {
     super.initState();
     updateMode = false;
     time = DateTime.now().millisecondsSinceEpoch;
+    noteColor =Color(kColors[0]);
   }
 
   @override
@@ -40,24 +42,26 @@ class _AddNoteState extends State<AddNote> {
     if (note != null) {
       title = note.title;
       noteText = note.note;
-      noteColor = Color(note.color);
       updateMode = true;
       time = note.time;
+      noteColor = Color(note.color);
     }
-    return Consumer<NoteColor>(
-      builder: (context, color, child) {
-        if (noteColor != null) {
-          color.color = noteColor;
-        }
-        noteColor = color.color;
-        return WillPopScope(
-          onWillPop: () async {
-            insertOrUpdate(provider);
-            return true;
-          },
-          child: Scaffold(
-            backgroundColor: color.color,
-            body: SafeArea(
+
+    return Consumer<NoteColor>(builder: (context, color, child) {
+      if (noteColor != null) {
+        color.color = noteColor;
+        noteColor = null;
+      }
+      return WillPopScope(
+        onWillPop: () async {
+          insertOrUpdate(provider, color.color);
+          return true;
+        },
+        child: Scaffold(
+          backgroundColor: color.color,
+          body: SafeArea(
+            child: Card(
+              color: color.color,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -66,7 +70,7 @@ class _AddNoteState extends State<AddNote> {
                       icon: Icon(Icons.arrow_back),
                       color: Colors.black45,
                       onPressed: () {
-                        insertOrUpdate(provider);
+                        insertOrUpdate(provider, color.color);
                         Navigator.pop(context);
                       }),
                   Padding(
@@ -97,7 +101,6 @@ class _AddNoteState extends State<AddNote> {
                         onChanged: (val) {
                           noteText = val;
                         },
-                        autofocus: true,
                         style: TextStyle(fontSize: 18),
                         maxLines: null,
                         decoration: InputDecoration(
@@ -116,14 +119,12 @@ class _AddNoteState extends State<AddNote> {
               ),
             ),
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 
-  void insertOrUpdate(
-    NoteProvider provider,
-  ) {
+  void insertOrUpdate(NoteProvider provider,Color noteColor) {
     if (!updateMode) {
       provider.insertNote(
           Note(title: title, note: noteText, color: noteColor.value));

@@ -6,9 +6,9 @@ import 'color_icon.dart';
 
 class ColorsListView extends StatelessWidget {
   final List<Widget> colorsList = List.generate(
-      colors.length,
+      kColors.length,
       (index) => ColorIcon(
-            color: Color(colors[index]),
+            color: Color(kColors[index]),
           ));
 
   @override

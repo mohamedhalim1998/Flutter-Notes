@@ -14,27 +14,30 @@ class NoteCard extends StatelessWidget {
       onPressed: () {
         Navigator.pushNamed(context, AddNote.ROUTE_ID, arguments: note);
       },
-      child: Card(
-        color: Color(note.color),
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                note.title != null ? note.title : "",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+      child: Hero(
+        tag: note.id,
+        child: Card(
+          color: Color(note.color),
+          elevation: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  note.title != null ? note.title : "",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              Text(
-                note.note != null ? note.note : "",
-                style: TextStyle(color: Colors.black54),
-              ),
-            ],
+                Text(
+                  note.note != null ? note.note : "",
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
           ),
         ),
       ),
