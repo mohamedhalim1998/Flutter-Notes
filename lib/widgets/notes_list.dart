@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:notes_app/model/Note.dart';
 import 'package:notes_app/widgets/note_card.dart';
 
@@ -10,16 +11,16 @@ class NotesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final orientation = MediaQuery.of(context).orientation;
-    return SliverGrid(
-      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: orientation == Orientation.portrait ? 2 : 3),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final Note note = notes.elementAt(index);
-          return NoteCard(note);
-        },
-        childCount: notes.length,
-      ),
+    return SliverStaggeredGrid.countBuilder(
+      crossAxisCount: 4,
+      itemCount: notes.length,
+      itemBuilder: (BuildContext context, int index) {
+        return NoteCard(notes[index]);
+      },
+      staggeredTileBuilder: (int index) =>
+          new StaggeredTile.fit(2),
+      mainAxisSpacing: 4.0,
+      crossAxisSpacing: 4.0,
     );
   }
 }

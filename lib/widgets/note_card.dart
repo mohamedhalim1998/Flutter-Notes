@@ -33,7 +33,7 @@ class NoteCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  note.note != null ? note.note : "",
+                  getNoteText(),
                   style: TextStyle(color: Colors.black54),
                 ),
               ],
@@ -42,5 +42,17 @@ class NoteCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getNoteText() {
+    if (note.note != null) {
+      if (note.note.length > 50) {
+        return note.note.substring(0, 200) + "\u22EF";
+      } else {
+        return note.note;
+      }
+    } else {
+      return "";
+    }
   }
 }
